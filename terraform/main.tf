@@ -28,4 +28,20 @@ resource "aws_instance" "lang-ser" {
   }
 }
 
-ssh -i C:\Users\acer\Desktop\s-lang\terraform\my-key ec2-user@54.245.175.30
+resource "aws_launch_template" "foobar" {
+  name_prefix   = "foobar"
+  image_id      = "ami-04e914639d0cca79a"
+  instance_type = "t2.micro"
+}
+
+resource "aws_autoscaling_group" "bar" {
+  availability_zones = ["us-west-2a"]
+  desired_capacity   = 1
+  max_size           = 2
+  min_size           = 1
+
+  launch_template {
+    id      = aws_launch_template.foobar.id
+    version = "$Latest"
+  }
+}
